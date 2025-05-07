@@ -52,7 +52,7 @@ aliasBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 aliasBox.Font = Enum.Font.Gotham
 aliasBox.TextSize = 18
 aliasBox.Text = savedAlias
-aliasBox.PlaceholderText = "Nhập alias của bạn..."
+aliasBox.PlaceholderText = "Nhập Đơn của bạn vô"
 aliasBox.ClearTextOnFocus = false
 
 -- Bo góc alias
