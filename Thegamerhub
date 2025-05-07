@@ -1,0 +1,70 @@
+--// Đảm bảo dịch vụ
+local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+--// Lấy tên bị che
+local function getHiddenName(name)
+	local half = math.floor(#name / 2)
+	return name:sub(1, half) .. string.rep("*", #name - half)
+end
+
+--// Alias lưu khi đổi server
+local teleportData = TeleportService:GetLocalPlayerTeleportData()
+local savedAlias = teleportData and teleportData.alias or ""
+
+--// UI
+local gui = Instance.new("ScreenGui", game.CoreGui)
+gui.Name = "AliasMenu"
+
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 260, 0, 80)
+frame.Position = UDim2.new(0, 40, 0, 100)
+frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+frame.BorderSizePixel = 0
+frame.Active = true
+frame.Draggable = true -- Cho phép kéo
+
+-- Shadow
+local uiCorner = Instance.new("UICorner", frame)
+uiCorner.CornerRadius = UDim.new(0, 8)
+
+-- Viền sáng
+local uistroke = Instance.new("UIStroke", frame)
+uistroke.Color = Color3.fromRGB(255, 204, 0)
+uistroke.Thickness = 1.5
+
+-- Label Player
+local nameLabel = Instance.new("TextLabel", frame)
+nameLabel.Size = UDim2.new(1, 0, 0.5, 0)
+nameLabel.BackgroundTransparency = 1
+nameLabel.TextColor3 = Color3.fromRGB(255, 221, 0)
+nameLabel.Text = "Player: " .. getHiddenName(player.Name)
+nameLabel.Font = Enum.Font.GothamBold
+nameLabel.TextSize = 22
+
+-- Alias nhập
+local aliasBox = Instance.new("TextBox", frame)
+aliasBox.Size = UDim2.new(1, -20, 0.3, 0)
+aliasBox.Position = UDim2.new(0, 10, 0.55, 0)
+aliasBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+aliasBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+aliasBox.Font = Enum.Font.Gotham
+aliasBox.TextSize = 18
+aliasBox.Text = savedAlias
+aliasBox.PlaceholderText = "Nhập alias của bạn..."
+aliasBox.ClearTextOnFocus = false
+
+-- Bo góc alias
+local aliasCorner = Instance.new("UICorner", aliasBox)
+aliasCorner.CornerRadius = UDim.new(0, 6)
+
+-- Border alias
+local aliasStroke = Instance.new("UIStroke", aliasBox)
+aliasStroke.Color = Color3.fromRGB(255, 204, 0)
+aliasStroke.Thickness = 1
+
+-- Cập nhật dữ liệu khi người dùng gõ
+aliasBox:GetPropertyChangedSignal("Text"):Connect(function()
+	TeleportService:SetTeleportData({alias = aliasBox.Text})
+end)
